@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Wallet, LogIn, Settings, ShieldCheck } from 'lucide-react';
 
@@ -8,7 +7,7 @@ export const AuthGateway = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8">
       <div className="text-center space-y-4">
-        <h1 className="text-6xl font-black tracking-tighter uppercase italic">
+        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white">
           Captain <span className="text-white">Cool</span>
         </h1>
         <p className="text-zinc-500 font-medium tracking-widest uppercase text-xs">
@@ -24,7 +23,7 @@ export const AuthGateway = () => {
           >
             <div className="flex items-center space-x-4">
               <Wallet className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
-              <span className="font-bold">Connect MetaMask</span>
+              <span className="font-bold text-white text-sm">Connect MetaMask</span>
             </div>
             {walletAddress ? (
               <ShieldCheck className="w-5 h-5 text-green-500" />
@@ -39,7 +38,7 @@ export const AuthGateway = () => {
           >
             <div className="flex items-center space-x-4">
               <LogIn className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
-              <span className="font-bold">Web2 Login</span>
+              <span className="font-bold text-white text-sm">Web2 Login</span>
             </div>
             {user ? (
               <ShieldCheck className="w-5 h-5 text-green-500" />
@@ -51,7 +50,7 @@ export const AuthGateway = () => {
 
         {(user || walletAddress) && (
           <div className="pt-6 border-t border-white/5">
-            <button className="clay-button w-full uppercase tracking-widest text-sm">
+            <button className="clay-button w-full uppercase tracking-widest text-[10px]">
               Enter The Brain Room
             </button>
           </div>
@@ -68,7 +67,7 @@ export const SettingsDashboard = () => {
     <div className="glass-panel p-8 max-w-2xl mx-auto space-y-6">
       <div className="flex items-center space-x-3 mb-4">
         <Settings className="w-6 h-6 text-zinc-400" />
-        <h2 className="text-2xl font-bold uppercase tracking-tight">AI Provisioning</h2>
+        <h2 className="text-2xl font-bold uppercase tracking-tight text-white">AI Provisioning</h2>
       </div>
       
       <div className="space-y-2">
@@ -80,9 +79,9 @@ export const SettingsDashboard = () => {
           value={geminiKey}
           onChange={(e) => updateGeminiKey(e.target.value)}
           placeholder="••••••••••••••••••••••••••••"
-          className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-white/30 transition-colors"
+          className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-white/30 transition-colors text-white"
         />
-        <p className="text-[10px] text-zinc-600 uppercase">
+        <p className="text-[10px] text-zinc-600 uppercase font-medium">
           Your key is stored locally and never exposed to the client console.
         </p>
       </div>

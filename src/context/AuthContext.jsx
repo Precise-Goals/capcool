@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { auth, googleProvider } from '../firebase';
+import { signInWithPopup, signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
 import { ethers } from 'ethers';
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut as firebaseSignOut } from 'firebase/auth';
-import './firebase'; // Ensure firebase is initialized
 
 const AuthContext = createContext();
 
@@ -11,13 +11,11 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [geminiKey, setGeminiKey] = useState(localStorage.getItem('GEMINI_API_KEY') || '');
 
-  const auth = getAuth();
-  const provider = new GoogleAuthProvider();
-
   const loginWithGoogle = async () => {
     try {
-      const result = await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, googleProvider);
       setUser(result.user);
+      return result.user;
     } catch (error) {
       console.error("Firebase Auth Error:", error);
     }
@@ -28,6 +26,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         setWalletAddress(accounts[0]);
+        return accounts[0];
       } catch (error) {
         console.error("MetaMask Error:", error);
       }
@@ -48,7 +47,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
     });
