@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { Wallet, LogIn, Settings, ShieldCheck } from 'lucide-react';
 
@@ -5,7 +6,12 @@ export const AuthGateway = () => {
   const { user, walletAddress, loginWithGoogle, connectWallet } = useAuth();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8">
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      className="flex flex-col items-center justify-center min-h-[60vh] space-y-8"
+    >
       <div className="text-center space-y-4">
         <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white">
           Captain <span className="text-white">Cool</span>
@@ -56,7 +62,7 @@ export const AuthGateway = () => {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

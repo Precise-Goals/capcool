@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { LayoutGrid, Info, Shield, LogOut } from 'lucide-react';
@@ -15,10 +16,14 @@ export const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-xl border-b border-white/5">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <Link to="/" className="flex items-center space-x-3 group">
-          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+        <Link to="/" className="flex items-center space-x-3">
+          <motion.div
+            className="w-10 h-10 bg-white rounded-xl flex items-center justify-center"
+            whileHover={{ rotate: 12, scale: 1.08 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+          >
             <div className="w-5 h-5 bg-black rounded-sm rotate-45" />
-          </div>
+          </motion.div>
           <div className="flex flex-col -space-y-1">
             <span className="font-black uppercase tracking-tighter text-xl italic text-white">Captain</span>
             <span className="font-bold uppercase tracking-[0.3em] text-[10px] text-zinc-500">Cool</span>

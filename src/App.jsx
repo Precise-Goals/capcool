@@ -4,7 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navbar, Footer } from './components/Navigation';
 import { Home, About } from './components/Pages';
 import { AuthGateway, SettingsDashboard } from './components/AuthComponents';
-import { Play, MessageSquare, Terminal, ChevronRight, Wind, Droplets, MapPin, Users } from 'lucide-react';
+import { Play, MessageSquare, Terminal, ChevronRight, Wind, Droplets, MapPin, Users, Globe, Image as ImageIcon } from 'lucide-react';
 
 const ProtectedRoute = ({ children }) => {
   const { user, walletAddress, loading } = useAuth();
@@ -17,18 +17,18 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-const InputField = ({ label, value, onChange, placeholder, icon: Icon }) => (
+const InputField = ({ label, value, onChange, placeholder, icon: Icon, type = "text" }) => (
   <div className="space-y-1.5">
     <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center space-x-2">
       {Icon && <Icon className="w-3 h-3" />}
       <span>{label}</span>
     </label>
     <input 
-      type="text" 
+      type={type} 
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full bg-black/40 border border-white/5 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-white/20 transition-all font-mono"
+      className="w-full bg-black/40 border border-white/5 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-white/20 transition-all font-mono text-white"
     />
   </div>
 );
@@ -37,6 +37,7 @@ const BrainRoom = () => {
   const { geminiKey } = useAuth();
   const [loading, setLoading] = useState(false);
   const [debate, setDebate] = useState([]);
+  const [mode, setMode] = useState('manual'); // 'manual' or 'real-time'
   
   // Structured Match State
   const [matchState, setMatchState] = useState({
@@ -49,14 +50,17 @@ const BrainRoom = () => {
     venue: '',
     batterOnStrike: '',
     bowler: '',
-    additionalContext: ''
+    additionalContext: '',
+    liveUrl: ''
   });
 
   const runDebate = async () => {
     if (!geminiKey) return;
     setLoading(true);
     
-    const fullContext = `
+    const fullContext = mode === 'real-time' 
+      ? `LIVE SCRAPER URL: ${matchState.liveUrl}\nADDITIONAL CONTEXT: ${matchState.additionalContext}`
+      : `
       Innings: ${matchState.innings}
       Over: ${matchState.over}
       Current Score: ${matchState.score}
@@ -89,8 +93,30 @@ const BrainRoom = () => {
     <div className="pt-32 pb-20 px-6 max-w-7xl mx-auto space-y-12">
       <div className="flex flex-col md:flex-row justify-between items-end gap-6">
         <div className="space-y-2">
-          <h1 className="text-5xl font-black uppercase italic tracking-tighter">The Brain Room</h1>
-          <p className="text-zinc-500 font-bold uppercase tracking-[0.3em] text-[10px]">Active Multi-Agent Session</p>
+          <h1 className="text-5xl font-black uppercase italic tracking-tighter text-white">The Brain Room</h1>
+          <div className="flex items-center space-x-4">
+            <p className="text-zinc-500 font-bold uppercase tracking-[0.3em] text-[10px]">Active Multi-Agent Session</p>
+            <div className="h-1 w-1 rounded-full bg-zinc-800" />
+            <div className="flex items-center space-x-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-[8px] font-black uppercase text-green-500/80 tracking-widest">Live Engine</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="flex bg-white/5 p-1 rounded-full border border-white/10">
+          <button 
+            onClick={() => setMode('manual')}
+            className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'manual' ? 'bg-white text-black' : 'text-zinc-500 hover:text-white'}`}
+          >
+            Manual
+          </button>
+          <button 
+            onClick={() => setMode('real-time')}
+            className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'real-time' ? 'bg-white text-black' : 'text-zinc-500 hover:text-white'}`}
+          >
+            Real-Time
+          </button>
         </div>
       </div>
 
@@ -98,104 +124,133 @@ const BrainRoom = () => {
         {/* Match State Input Panel */}
         <div className="lg:col-span-4 space-y-6">
           <div className="glass-panel p-6 space-y-6 bg-white/[0.02]">
-            <div className="flex items-center space-x-2 text-zinc-400 pb-2 border-b border-white/5">
-              <Terminal className="w-4 h-4" />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Match State Engine</span>
+            <div className="flex items-center justify-between pb-2 border-b border-white/5">
+              <div className="flex items-center space-x-2 text-zinc-400">
+                <Terminal className="w-4 h-4" />
+                <span className="text-[10px] font-bold uppercase tracking-widest">Match State Engine</span>
+              </div>
+              {mode === 'real-time' && <Globe className="w-3.5 h-3.5 text-zinc-600 animate-spin-slow" />}
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500">Innings</label>
-                <select 
-                  className="w-full bg-black/40 border border-white/5 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-white/20"
-                  value={matchState.innings}
-                  onChange={(e) => setMatchState({...matchState, innings: e.target.value})}
-                >
-                  <option value="1">1st Innings</option>
-                  <option value="2">2nd Innings</option>
-                </select>
+            {mode === 'real-time' ? (
+              <div className="space-y-6 animate-in fade-in duration-500">
+                <InputField 
+                  label="Live Match URL" 
+                  value={matchState.liveUrl}
+                  onChange={(v) => setMatchState({...matchState, liveUrl: v})}
+                  placeholder="ESPNCricinfo / Cricbuzz URL"
+                  icon={Globe}
+                />
+                <div className="p-4 bg-white/[0.03] border border-white/5 rounded-xl space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <ImageIcon className="w-3 h-3 text-zinc-500" />
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500">Multimodal Context</span>
+                  </div>
+                  <div className="h-24 border-2 border-dashed border-white/5 rounded-lg flex flex-col items-center justify-center space-y-2 group hover:border-white/10 transition-colors cursor-pointer">
+                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                      <Play className="w-3 h-3 rotate-90 text-zinc-600" />
+                    </div>
+                    <span className="text-[8px] font-bold text-zinc-600 uppercase">Upload Scorecard Screenshot</span>
+                  </div>
+                </div>
               </div>
-              <InputField 
-                label="Over/Ball" 
-                value={matchState.over}
-                onChange={(v) => setMatchState({...matchState, over: v})}
-                placeholder="15.2"
-              />
-            </div>
+            ) : (
+              <div className="space-y-6 animate-in fade-in duration-500">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500">Innings</label>
+                    <select 
+                      className="w-full bg-black/40 border border-white/5 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-white/20 text-white"
+                      value={matchState.innings}
+                      onChange={(e) => setMatchState({...matchState, innings: e.target.value})}
+                    >
+                      <option value="1">1st Innings</option>
+                      <option value="2">2nd Innings</option>
+                    </select>
+                  </div>
+                  <InputField 
+                    label="Over/Ball" 
+                    value={matchState.over}
+                    onChange={(v) => setMatchState({...matchState, over: v})}
+                    placeholder="15.2"
+                  />
+                </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <InputField 
-                label="Score" 
-                value={matchState.score}
-                onChange={(v) => setMatchState({...matchState, score: v})}
-                placeholder="142/4"
-              />
-              <InputField 
-                label="Wickets" 
-                value={matchState.wickets}
-                onChange={(v) => setMatchState({...matchState, wickets: v})}
-                placeholder="4"
-              />
-            </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <InputField 
+                    label="Score" 
+                    value={matchState.score}
+                    onChange={(v) => setMatchState({...matchState, score: v})}
+                    placeholder="142/4"
+                  />
+                  <InputField 
+                    label="Wickets" 
+                    value={matchState.wickets}
+                    onChange={(v) => setMatchState({...matchState, wickets: v})}
+                    placeholder="4"
+                  />
+                </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <InputField 
-                label="On Strike" 
-                value={matchState.batterOnStrike}
-                onChange={(v) => setMatchState({...matchState, batterOnStrike: v})}
-                placeholder="Virat K."
-                icon={Users}
-              />
-              <InputField 
-                label="Bowler" 
-                value={matchState.bowler}
-                onChange={(v) => setMatchState({...matchState, bowler: v})}
-                placeholder="Rashid K."
-                icon={Users}
-              />
-            </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <InputField 
+                    label="On Strike" 
+                    value={matchState.batterOnStrike}
+                    onChange={(v) => setMatchState({...matchState, batterOnStrike: v})}
+                    placeholder="Virat K."
+                    icon={Users}
+                  />
+                  <InputField 
+                    label="Bowler" 
+                    value={matchState.bowler}
+                    onChange={(v) => setMatchState({...matchState, bowler: v})}
+                    placeholder="Rashid K."
+                    icon={Users}
+                  />
+                </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center space-x-2">
-                  <Wind className="w-3 h-3" />
-                  <span>Pitch</span>
-                </label>
-                <select 
-                  className="w-full bg-black/40 border border-white/5 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-white/20"
-                  value={matchState.pitch}
-                  onChange={(e) => setMatchState({...matchState, pitch: e.target.value})}
-                >
-                  <option>Flat</option>
-                  <option>Turning</option>
-                  <option>Green</option>
-                  <option>Two-paced</option>
-                </select>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center space-x-2">
+                      <Wind className="w-3 h-3" />
+                      <span>Pitch</span>
+                    </label>
+                    <select 
+                      className="w-full bg-black/40 border border-white/5 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-white/20 text-white"
+                      value={matchState.pitch}
+                      onChange={(e) => setMatchState({...matchState, pitch: e.target.value})}
+                    >
+                      <option>Flat</option>
+                      <option>Turning</option>
+                      <option>Green</option>
+                      <option>Two-paced</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center space-x-2">
+                      <Droplets className="w-3 h-3" />
+                      <span>Dew</span>
+                    </label>
+                    <select 
+                      className="w-full bg-black/40 border border-white/5 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-white/20 text-white"
+                      value={matchState.dew}
+                      onChange={(e) => setMatchState({...matchState, dew: e.target.value})}
+                    >
+                      <option>No</option>
+                      <option>Light</option>
+                      <option>Heavy</option>
+                    </select>
+                  </div>
+                </div>
+
+                <InputField 
+                  label="Venue" 
+                  value={matchState.venue}
+                  onChange={(v) => setMatchState({...matchState, venue: v})}
+                  placeholder="Wankhede, Mumbai"
+                  icon={MapPin}
+                />
               </div>
-              <div className="space-y-1.5">
-                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center space-x-2">
-                  <Droplets className="w-3 h-3" />
-                  <span>Dew</span>
-                </label>
-                <select 
-                  className="w-full bg-black/40 border border-white/5 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-white/20"
-                  value={matchState.dew}
-                  onChange={(e) => setMatchState({...matchState, dew: e.target.value})}
-                >
-                  <option>No</option>
-                  <option>Light</option>
-                  <option>Heavy</option>
-                </select>
-              </div>
-            </div>
-
-            <InputField 
-              label="Venue" 
-              value={matchState.venue}
-              onChange={(v) => setMatchState({...matchState, venue: v})}
-              placeholder="Wankhede, Mumbai"
-              icon={MapPin}
-            />
+            )}
 
             <div className="space-y-1.5">
               <label className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500">Tactical Context</label>
@@ -203,7 +258,7 @@ const BrainRoom = () => {
                 value={matchState.additionalContext}
                 onChange={(e) => setMatchState({...matchState, additionalContext: e.target.value})}
                 placeholder="Any additional details..."
-                className="w-full h-24 bg-black/40 border border-white/5 rounded-xl p-3 text-xs focus:outline-none focus:border-white/20 transition-all resize-none"
+                className="w-full h-24 bg-black/40 border border-white/5 rounded-xl p-3 text-xs focus:outline-none focus:border-white/20 transition-all resize-none text-white"
               />
             </div>
 
@@ -234,12 +289,12 @@ const BrainRoom = () => {
             <div className="flex items-center justify-between border-b border-white/5 pb-6 mb-8">
               <div className="flex items-center space-x-3">
                 <MessageSquare className="w-5 h-5 text-zinc-400" />
-                <h3 className="font-bold uppercase tracking-tight text-sm italic">Debate Visualizer <span className="text-zinc-600 ml-2 font-mono text-[10px] not-italic tracking-widest uppercase">ADK-v2.0</span></h3>
+                <h3 className="font-bold uppercase tracking-tight text-sm italic text-white">Debate Visualizer <span className="text-zinc-600 ml-2 font-mono text-[10px] not-italic tracking-widest uppercase">ADK-v2.5</span></h3>
               </div>
               <div className="flex space-x-1.5">
-                <div className="w-2 h-2 rounded-full bg-red-500/20" />
-                <div className="w-2 h-2 rounded-full bg-yellow-500/20" />
-                <div className="w-2 h-2 rounded-full bg-green-500/20" />
+                <div className="w-2 h-2 rounded-full bg-white/5" />
+                <div className="w-2 h-2 rounded-full bg-white/10" />
+                <div className="w-2 h-2 rounded-full bg-white/20" />
               </div>
             </div>
 
