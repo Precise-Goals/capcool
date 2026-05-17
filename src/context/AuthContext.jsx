@@ -57,15 +57,30 @@ export const AuthProvider = ({ children }) => {
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        setWalletAddress(accounts[0]);
-        return accounts[0];
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = await provider.getSigner();
+        const address = await signer.getAddress();
+        
+        // Cryptographic Challenge
+        const nonce = Date.now();
+        const message = `Verify wallet ownership for Captain Cool (AI-Orchestrated / Trustless Architecture):\nNonce: ${nonce}`;
+        
+        const signature = await signer.signMessage(message);
+        const recoveredAddress = ethers.verifyMessage(message, signature);
+        
+        if (recoveredAddress.toLowerCase() === address.toLowerCase()) {
+          setWalletAddress(address);
+          return address;
+        } else {
+          throw new Error("Signature verification failed.");
+        }
       } catch (error) {
-        console.error("MetaMask Error:", error);
+        console.error("MetaMask Verification Error:", error);
         throw error;
       }
     } else {
-      alert("Please install MetaMask!");
+      throw new Error("METAMASK_NOT_INSTALLED");
     }
   };
 

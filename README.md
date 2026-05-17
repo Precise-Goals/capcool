@@ -45,6 +45,22 @@ The entire system is orchestrated around **three distinct, named Gemini-powered 
 | 😈 **The Devil's Advocate** | `gemini-2.5-pro` | Risk-seeking, contrarian mindset. Exploits dew factors, pitch behavior & psychological pressure. Aggressively challenges every proposal. |
 | 👑 **The Virtual Captain** | `gemini-2.5-pro` | Pragmatic leadership. Synthesizes the debate, weighs resources & game phase, and delivers the final definitive decision. |
 
+### 🌪️ Advanced Agentic Tooling: Micro-Climate & Geospatial Venue Analytics
+
+To elevate **Captain Cool** from a standard LLM wrapper to an elite tactical engine, the agents are equipped with real-time API tools to process the physical environment of the match. 
+
+The multi-agent debate loop heavily relies on two custom tools implemented via Gemini Native Function Calling:
+
+1. **Micro-Climate & Dew Prediction Engine (Weather API Integration):**
+   - **Data Fetched:** Live dew point, humidity spikes, wind speed, and wind direction.
+   - **Agentic Use Case:** The *Devil's Advocate* agent fetches this data to challenge standard tactical norms. If the humidity crosses 75% at a coastal venue like Chepauk, the agent dynamically calculates the "grip loss percentage" and forces the *Virtual Captain* to hold back spin bowlers due to a wet ball.
+
+2. **Geospatial Stadium & Pitch Analytics:**
+   - **Data Fetched:** Boundary dimensions (e.g., asymmetric boundaries), pitch soil profiles (Red vs. Black soil), and historical venue run-rates processed via a high-performance data pipeline.
+   - **Agentic Use Case:** The *Head Analyst* uses this tool to identify spatial weaknesses. If the wind is blowing towards a statistically short boundary (e.g., 60m at Chinnaswamy), the agent will explicitly restrict the *Virtual Captain* from bowling into the wind, suggesting specific field placements (like a deep point or sweeper cover) to protect the vulnerability.
+
+These tools guarantee that the internal agent debate is mathematically grounded in the actual physics of the current match, avoiding generic cricket advice and delivering hyper-specific, winning strategies.
+
 ### Debate Flow
 
 ```
