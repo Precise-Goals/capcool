@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --color-pitch-black: #000000;
+  --color-crisp-white: #FFFFFF;
+  --color-depth-1: #1A1A1A;
+  --color-depth-2: #2D2D2D;
+  
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl;
+  }
+  
+  .clay-button {
+    @apply bg-white text-black font-bold py-3 px-8 rounded-full 
+           shadow-[0_10px_20px_rgba(0,0,0,0.3),inset_0_-4px_8px_rgba(0,0,0,0.2),inset_0_4px_8px_rgba(255,255,255,0.8)]
+           active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]
+           transition-all duration-200 transform hover:scale-105;
+  }
+}
+
+body {
+  @apply bg-pitch-black text-crisp-white min-h-screen;
+}

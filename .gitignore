@@ -1,0 +1,20 @@
+# Core Credentials
+.env
+.env.local
+
+# Google Antigravity Configuration & Local Execution Traces
+# DO NOT ignore the entire folder if you need to showcase evaluation logs,
+# but guarantee environment configs are parsed out safely.
+.Antigravityfolder/secrets/
+.Antigravityfolder/local_cache/
+
+# Node dependencies
+node_modules/
+dist/
+.next/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.log
