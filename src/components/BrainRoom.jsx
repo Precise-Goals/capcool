@@ -32,7 +32,7 @@ const InputField = ({ label, value, onChange, placeholder, icon: Icon, type = "t
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         aria-label={ariaLabel || label}
-        className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-white/30 transition-all font-mono text-white placeholder:text-zinc-600 shadow-inner"
+        className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-white/30 transition-all font-mono text-white placeholder:text-zinc-300 shadow-inner"
       />
     </div>
   </div>
@@ -175,14 +175,25 @@ export const BrainRoom = () => {
                   exit={{ opacity: 0, y: -10 }}
                   className="space-y-8"
                 >
-                  <InputField 
-                    label="Live Match URL" 
-                    value={matchState.liveUrl}
-                    onChange={(v) => setMatchState({...matchState, liveUrl: v})}
-                    placeholder="espncricinfo.com/series/..."
-                    icon={RiGlobalFill}
-                    ariaLabel="Live Match URL Input"
-                  />
+                  <div className="space-y-3">
+                    <InputField 
+                      label="Live Match URL" 
+                      value={matchState.liveUrl}
+                      onChange={(v) => setMatchState({...matchState, liveUrl: v})}
+                      placeholder="espncricinfo.com/series/..."
+                      icon={RiGlobalFill}
+                      ariaLabel="Live Match URL Input"
+                    />
+                    <div className="flex items-center space-x-2 px-1">
+                      <span className="text-[9px] font-bold text-zinc-300 uppercase tracking-widest">Quick Inject:</span>
+                      <button
+                        onClick={() => setMatchState({...matchState, liveUrl: 'https://www.espncricinfo.com/series/ipl-2026-1510719'})}
+                        className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[9px] font-black uppercase tracking-widest text-zinc-400 hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/20"
+                      >
+                        ⚡ IPL 2026
+                      </button>
+                    </div>
+                  </div>
                   <div 
                     role="button"
                     tabIndex={0}
@@ -352,7 +363,7 @@ export const BrainRoom = () => {
             <div className="flex items-center justify-between border-b border-white/10 pb-8 mb-12">
               <div className="flex items-center space-x-4">
                 <RiMessage3Fill className="w-6 h-6 text-zinc-400" aria-hidden="true" />
-                <h3 className="font-black uppercase tracking-tight text-xl italic text-white">The Brain Room Transcript <span className="text-zinc-500 ml-4 font-mono text-[10px] not-italic tracking-[0.4em] uppercase">ADK-PRO-02</span></h3>
+                <h3 className="font-black uppercase tracking-tight text-xl italic text-white">The Brain Room Transcript <span className="text-zinc-400 ml-4 font-mono text-[10px] not-italic tracking-[0.4em] uppercase">ADK-PRO-02</span></h3>
               </div>
               <div className="flex space-x-2" aria-hidden="true">
                 <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
@@ -369,11 +380,11 @@ export const BrainRoom = () => {
                     transition={{ duration: 4, repeat: Infinity }}
                     className="w-24 h-24 border-2 border-white/20 rounded-[40px] flex items-center justify-center"
                   >
-                    <RiArrowRightSLine className="w-12 h-12 text-zinc-600" aria-hidden="true" />
+                    <RiArrowRightSLine className="w-12 h-12 text-zinc-300" aria-hidden="true" />
                   </motion.div>
                   <div className="text-center space-y-3">
-                    <p className="text-[12px] uppercase font-black tracking-[1em] italic text-zinc-500">System Standby</p>
-                    <p className="text-[9px] text-zinc-600 uppercase tracking-widest font-mono">Awaiting tactical match data injection...</p>
+                    <p className="text-[12px] uppercase font-black tracking-[1em] italic text-zinc-400">System Standby</p>
+                    <p className="text-[9px] text-zinc-300 uppercase tracking-widest font-mono">Awaiting tactical match data injection...</p>
                   </div>
                 </div>
               ) : (
@@ -391,7 +402,7 @@ export const BrainRoom = () => {
                          <span className="text-[11px] font-black uppercase tracking-[0.4em] text-white italic">
                           {step.agent}
                         </span>
-                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">TRACE_LOG_0{i+1}</span>
+                        <span className="text-[9px] font-mono text-zinc-400 uppercase tracking-widest">TRACE_LOG_0{i+1}</span>
                       </div>
                     </div>
                     <div className="bg-white/[0.03] border border-white/[0.06] p-10 rounded-[48px] group-hover:bg-white/[0.06] group-hover:border-white/10 transition-all duration-700 relative overflow-hidden">

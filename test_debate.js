@@ -3,45 +3,43 @@ import { createAgents } from './server/agents.js';
 async function testDebate() {
   const geminiKey = process.env.GEMINI_API_KEY;
   if (!geminiKey) {
-    console.error("Please set GEMINI_API_KEY environment variable for testing.");
+    console.error("CRITICAL: Set GEMINI_API_KEY environment variable for testing.");
     return;
   }
 
-  console.log("Initializing agents...");
-  const { headAnalyst, devilsAdvocate, virtualCaptain } = createAgents(geminiKey);
+  console.log("--- SYSTEM INITIALIZATION: 4-AGENT ADK LOOP ---");
+  const { headAnalyst, devilsAdvocate, virtualCaptain, matchCommentator } = createAgents(geminiKey);
 
   const context = `
-    Innings: 2
-    Over: 15.2
-    Current Score: 142/4
-    Wickets Lost: 4
-    Batter on Strike: Virat K.
-    Current Bowler: Rashid K.
-    Pitch Condition: Turning
-    Dew Factor: Light
-    Venue: Wankhede, Mumbai
-    Additional Tactical Context: 42 runs needed off 28 balls. Big hitter on strike. Left-arm spinner has 1 over left. Dew is actively setting in.
+    VENUE: Wankhede Stadium, Mumbai
+    INNINGS: 2
+    PHASE: Death Overs (17.4)
+    SCORE: 168/5 (Target 202)
+    BATTER: Andre Russell (34* off 12)
+    BOWLER: Jasprit Bumrah (1 over left)
+    TACTICAL: Heavy dew reported on field. Ball is soapy.
   `;
 
   try {
-    console.log("\n--- Phase 1: Analyst Proposal ---");
+    console.log("\n[1] DATA SCIENCE PROP...");
     const analysis = await headAnalyst.analyze(context);
     console.log(analysis);
 
-    console.log("\n--- Phase 2: Devil's Advocate Challenge ---");
-    const challenge = await devilsAdvocate.analyze(context, `Analyst Proposal: ${analysis}`);
+    console.log("\n[2] CONTRARIAN CHALLENGE...");
+    const challenge = await devilsAdvocate.analyze(context, analysis);
     console.log(challenge);
 
-    console.log("\n--- Phase 3: Captain Synthesis ---");
-    const decision = await virtualCaptain.analyze(context, `
-      Analyst Proposal: ${analysis}
-      Devil's Advocate Challenge: ${challenge}
-    `);
+    console.log("\n[3] CAPTAIN SYNTHESIS...");
+    const decision = await virtualCaptain.analyze(context, `Prop: ${analysis} \n Risk: ${challenge}`);
     console.log(decision);
+
+    console.log("\n[4] FAN-FRIENDLY COMMENTARY...");
+    const commentary = await matchCommentator.analyze(context, decision);
+    console.log(commentary);
     
-    console.log("\n--- DEBATE COMPLETED SUCCESSFULLY ---");
+    console.log("\n--- E2E VALIDATION SUCCESSFUL ---");
   } catch (error) {
-    console.error("Debate failed:", error);
+    console.error("Engine Stall:", error);
   }
 }
 

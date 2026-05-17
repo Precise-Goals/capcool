@@ -36,7 +36,7 @@ export const Navbar = () => {
           </motion.div>
           <div className="flex flex-col -space-y-1">
             <span className="font-black uppercase tracking-tighter text-xl italic text-white">Captain</span>
-            <span className="font-bold uppercase tracking-[0.3em] text-[10px] text-zinc-500">Cool</span>
+            <span className="font-bold uppercase tracking-[0.3em] text-[10px] text-zinc-400">Cool</span>
           </div>
         </Link>
 
@@ -49,7 +49,7 @@ export const Navbar = () => {
                 key={link.path}
                 to={link.path}
                 className={`relative flex items-center space-x-2 px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${
-                  isActive ? 'text-black' : 'text-zinc-500 hover:text-white hover:bg-white/5'
+                  isActive ? 'text-black' : 'text-zinc-400 hover:text-white hover:bg-white/5'
                 }`}
               >
                 {isActive && (
@@ -103,19 +103,19 @@ export const Footer = () => (
           </div>
           <span className="font-black uppercase tracking-tighter text-2xl italic text-white">Captain Cool</span>
         </div>
-        <p className="text-zinc-500 text-sm max-w-sm leading-relaxed font-medium italic">
+        <p className="text-zinc-400 text-sm max-w-sm leading-relaxed font-medium italic">
           "The ultimate adversarial multi-agent brain designed to simulate elite tactical decision-making at the speed of light."
         </p>
         <div className="flex space-x-4">
-          <a href="#" className="p-2.5 bg-white/5 border border-white/5 rounded-xl text-zinc-500 hover:text-white transition-all"><RiGithubFill className="w-5 h-5" /></a>
-          <a href="#" className="p-2.5 bg-white/5 border border-white/5 rounded-xl text-zinc-500 hover:text-white transition-all"><RiTwitterFill className="w-5 h-5" /></a>
-          <a href="#" className="p-2.5 bg-white/5 border border-white/5 rounded-xl text-zinc-500 hover:text-white transition-all"><RiDiscordFill className="w-5 h-5" /></a>
+          <a href="#" className="p-2.5 bg-white/5 border border-white/5 rounded-xl text-zinc-400 hover:text-white transition-all"><RiGithubFill className="w-5 h-5" /></a>
+          <a href="#" className="p-2.5 bg-white/5 border border-white/5 rounded-xl text-zinc-400 hover:text-white transition-all"><RiTwitterFill className="w-5 h-5" /></a>
+          <a href="#" className="p-2.5 bg-white/5 border border-white/5 rounded-xl text-zinc-400 hover:text-white transition-all"><RiDiscordFill className="w-5 h-5" /></a>
         </div>
       </div>
       
       <div className="space-y-6">
         <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-white italic">Navigation</h4>
-        <ul className="space-y-3 text-zinc-500 text-[11px] font-black uppercase tracking-widest">
+        <ul className="space-y-3 text-zinc-400 text-[11px] font-black uppercase tracking-widest">
           <li><Link to="/" className="hover:text-white transition-colors flex items-center space-x-2"><RiLayoutGridFill className="w-3.5 h-3.5" /><span>Home</span></Link></li>
           <li><Link to="/about" className="hover:text-white transition-colors flex items-center space-x-2"><RiInformationFill className="w-3.5 h-3.5" /><span>About</span></Link></li>
           <li><Link to="/brain-room" className="hover:text-white transition-colors flex items-center space-x-2"><RiShieldFlashFill className="w-3.5 h-3.5" /><span>Brain Room</span></Link></li>
@@ -124,7 +124,7 @@ export const Footer = () => (
 
       <div className="space-y-6">
         <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-white italic">Technology</h4>
-        <ul className="space-y-3 text-zinc-500 text-[11px] font-black uppercase tracking-widest">
+        <ul className="space-y-3 text-zinc-400 text-[11px] font-black uppercase tracking-widest">
           <li className="flex items-center space-x-2"><RiTerminalBoxFill className="w-3.5 h-3.5" /><span>Gemini 2.0 Pro</span></li>
           <li className="flex items-center space-x-2"><SiReact className="w-3.5 h-3.5" /><span>React High-Fid</span></li>
           <li className="flex items-center space-x-2"><SiVite className="w-3.5 h-3.5" /><span>Vite Engine</span></li>

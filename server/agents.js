@@ -1,20 +1,64 @@
 import { GoogleGenAI } from '@google/genai';
+import fs from 'fs';
+import path from 'path';
 
-const liveScraperTool = {
-  functionDeclarations: [
-    {
-      name: "scrape_live_match_context",
-      description: "Scrape real-time scoreboard metrics from a given URL to determine current match state and counterfactuals.",
-      parameters: {
-        type: "OBJECT",
-        properties: {
-          url: { type: "STRING", description: "The live match URL" }
-        },
-        required: ["url"]
-      }
-    }
-  ]
+// --- Shared Utility for Google AI ---
+let genAIInstance = null;
+const getGenAI = (apiKey) => {
+  if (!genAIInstance) genAIInstance = new GoogleGenAI({ apiKey });
+  return genAIInstance;
 };
+
+// --- External Data Tools ---
+
+const fetchWeather = async (city) => {
+  const apiKey = process.env.OPENWEATHER_API_KEY;
+  if (!apiKey) {
+    // Fallback to high-fidelity mock if key is missing
+    const humidity = 55 + (city.length * 7) % 35;
+    return {
+      status: "Success (Mock)",
+      data: {
+        city,
+        temp: 28,
+        humidity: `${humidity}%`,
+        dew_point: 22,
+        description: "Clear skies with rising humidity",
+        tactical_implication: humidity > 75 ? "Extreme dew risk. Ball will be wet." : "Minimal dew impact."
+      }
+    };
+  }
+
+  try {
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`);
+    const data = await response.json();
+    return {
+      status: "Success",
+      data: {
+        city: data.name,
+        temp: data.main.temp,
+        humidity: `${data.main.humidity}%`,
+        description: data.weather[0].description,
+        tactical_implication: data.main.humidity > 70 ? "High humidity detected. Dew likely to set in." : "Dry conditions."
+      }
+    };
+  } catch (e) {
+    return { error: "Weather fetch failed" };
+  }
+};
+
+const getStadiumData = (venue) => {
+  try {
+    const dbPath = path.resolve(process.cwd(), 'server', 'stadiums.json');
+    const dbData = JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
+    const search = venue.toLowerCase();
+    return dbData.stadiums.find(s => s.name.toLowerCase().includes(search) || s.city.toLowerCase().includes(search));
+  } catch (e) {
+    return null;
+  }
+};
+
+// --- Agent Definition ---
 
 export class Agent {
   constructor(name, role, model, systemPrompt, apiKey, tools = []) {
@@ -23,108 +67,109 @@ export class Agent {
     this.model = model;
     this.systemPrompt = systemPrompt;
     this.tools = tools;
-    this.ai = new GoogleGenAI({ apiKey });
+    this.ai = getGenAI(apiKey);
   }
 
-  // Security: Basic prompt sanitization
-  sanitizeContext(input) {
+  sanitize(input) {
     if (!input) return "";
-    return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return input.replace(/[<>]/g, ""); // Brutal sanitization
   }
 
   async analyze(context, previousDebate = "") {
-    const config = {
-      systemInstruction: this.systemPrompt,
-    };
-    
-    if (this.tools.length > 0) {
-      config.tools = this.tools;
-    }
-
     const chat = this.ai.chats.create({
       model: this.model,
-      config: config
+      config: {
+        systemInstruction: this.systemPrompt,
+        tools: this.tools.length > 0 ? this.tools : undefined
+      }
     });
 
-    const safeContext = this.sanitizeContext(context);
-    const safePreviousDebate = this.sanitizeContext(previousDebate);
-
     const prompt = `
-      CURRENT MATCH CONTEXT:
-      ${safeContext}
-
-      PREVIOUS DEBATE TURNS:
-      ${safePreviousDebate}
-
-      Based on your role as ${this.name}, provide your tactical input.
-      Ensure your tone is professional yet authentic to elite cricket strategy.
+      CONTEXT: ${this.sanitize(context)}
+      DEBATE HISTORY: ${this.sanitize(previousDebate)}
+      
+      TASK: As ${this.name} (${this.role}), provide your unique perspective.
+      If a venue or city is mentioned, invoke the relevant tools first.
     `;
 
     let result = await chat.sendMessage({ message: prompt });
-    
-    // Live Web Context Scraper Execution
-    if (result.functionCalls && result.functionCalls.length > 0) {
-        const call = result.functionCalls[0];
-        if (call.name === "scrape_live_match_context") {
-            const args = call.args;
-            
-            // Simulating an actual external fetch pipeline
-            const fetchSimulatedLiveState = async (url) => {
-              // In production, this would use fetch() or Puppeteer
-              return new Promise(resolve => setTimeout(() => {
-                resolve({
-                  status: "Success",
-                  data: {
-                    inferredRunRate: 9.2,
-                    pitchDeterioration: "High turning probability observed in last 3 overs",
-                    counterfactual: "If the spinner bowls to the left-hander, win probability decreases by 12% due to short boundary on leg side."
-                  }
-                });
-              }, 500));
-            };
 
-            const scrapeData = await fetchSimulatedLiveState(args.url);
-            
-            result = await chat.sendMessage({
-              message: [{
-                functionResponse: {
-                    name: "scrape_live_match_context",
-                    response: scrapeData
-                }
-              }]
-            });
+    // Function Calling Loop
+    if (result.functionCalls?.length > 0) {
+      const toolResponses = [];
+      for (const call of result.functionCalls) {
+        if (call.name === "fetch_live_weather") {
+          const data = await fetchWeather(call.args.city);
+          toolResponses.push({ functionResponse: { name: call.name, response: data } });
+        } else if (call.name === "fetch_stadium_data") {
+          const data = getStadiumData(call.args.venue);
+          toolResponses.push({ 
+            functionResponse: { 
+              name: call.name, 
+              response: data ? { status: "Success", data } : { status: "Not Found" } 
+            } 
+          });
         }
+      }
+      if (toolResponses.length > 0) {
+        result = await chat.sendMessage({ message: toolResponses });
+      }
     }
 
     return result.text;
   }
 }
 
+// --- Agent Factory ---
+
 export const createAgents = (apiKey) => {
+  const commonModel = "gemini-2.5-pro";
+
   const headAnalyst = new Agent(
     "The Head Analyst",
-    "Data Analyst",
-    "gemini-2.5-pro",
-    "Grounded strictly in match history, historical player matchups, boundary dimensions, and historical venue run-rates. Proposes the initial tactical move based on maximum probability outcomes. You MUST use the \`scrape_live_match_context\` tool if a URL is provided in the context.",
+    "Data Scientist",
+    commonModel,
+    "You are a hyper-analytical IPL data scientist. Propose tactical moves based strictly on matchups, boundary lengths, and average scores. You MUST call 'fetch_stadium_data' if a venue is known.",
     apiKey,
-    [liveScraperTool]
+    [{
+      functionDeclarations: [{
+        name: "fetch_stadium_data",
+        description: "Get stadium soil, boundaries, and historical scores.",
+        parameters: { type: "OBJECT", properties: { venue: { type: "STRING" } }, required: ["venue"] }
+      }]
+    }]
   );
 
   const devilsAdvocate = new Agent(
     "The Devil's Advocate",
     "Contrarian Strategist",
-    "gemini-2.5-pro",
-    "Risk-seeking, contrarian mindset focused on unpredictability, psychological pressure, and exploiting unexpected pitch behavior/dew factors. Aggressively challenges the Analyst’s proposal.",
-    apiKey
+    commonModel,
+    "You aggressively challenge the Analyst. Focus on unpredictability, pressure, and the 'Dew Factor'. You MUST call 'fetch_live_weather' for the city to prove the Analyst wrong.",
+    apiKey,
+    [{
+      functionDeclarations: [{
+        name: "fetch_live_weather",
+        description: "Get live humidity and temperature.",
+        parameters: { type: "OBJECT", properties: { city: { type: "STRING" } }, required: ["city"] }
+      }]
+    }]
   );
 
   const virtualCaptain = new Agent(
     "The Virtual Captain",
-    "Decision Maker",
-    "gemini-2.5-pro",
-    "Pragmatic leadership persona. Focuses on resource preservation and game phase context. Evaluates the conflict, forces a resolution loop, and synthesizes the definitive final decision in authentic commentator prose.",
+    "Pragmatic Leader",
+    commonModel,
+    "You are the final decision maker (like Dhoni). Weigh the data vs the risks. Synthesize the debate into a single definitive move.",
     apiKey
   );
 
-  return { headAnalyst, devilsAdvocate, virtualCaptain };
+  const matchCommentator = new Agent(
+    "The Voice of IPL",
+    "Lead Commentator",
+    "gemini-2.5-flash", // Use flash for rapid commentary
+    "Translate the final technical decision into electric, authentic IPL commentator prose. Use metaphors, excitement, and cricket slang. Mention the stadium name and crowd energy.",
+    apiKey
+  );
+
+  return { headAnalyst, devilsAdvocate, virtualCaptain, matchCommentator };
 };

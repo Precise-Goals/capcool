@@ -18,6 +18,12 @@
 
 ---
 
+## 📖 Case Study & Build Documentation
+**Read the full technical deep-dive on Dev.to:**  
+👉 **[Building Captain Cool: The Multi-Agent IPL Match Strategist](https://dev.to/sarthak-patil/building-captain-cool-4bni)**
+
+---
+
 ## 🌟 What is Captain Cool?
 
 **Captain Cool** is an advanced **multi-agent AI system** that acts as your virtual IPL captain — making the next tactical decision in a live match the way Dhoni, Rohit, or Hardik would.
@@ -59,7 +65,7 @@ The multi-agent debate loop heavily relies on two custom tools implemented via G
    - **Data Fetched:** Boundary dimensions (e.g., asymmetric boundaries), pitch soil profiles (Red vs. Black soil), and historical venue run-rates processed via a high-performance data pipeline.
    - **Agentic Use Case:** The *Head Analyst* uses this tool to identify spatial weaknesses. If the wind is blowing towards a statistically short boundary (e.g., 60m at Chinnaswamy), the agent will explicitly restrict the *Virtual Captain* from bowling into the wind, suggesting specific field placements (like a deep point or sweeper cover) to protect the vulnerability.
 
-These tools guarantee that the internal agent debate is mathematically grounded in the actual physics of the current match, avoiding generic cricket advice and delivering hyper-specific, winning strategies.
+These tools guarantee that the internal agent debate is mathematically grounded in the actual physics of the current match, avoiding generic cricket advice and delivering hyper-specific, winning strategies.    
 
 ### Debate Flow
 

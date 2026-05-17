@@ -3,7 +3,6 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  SiMetamask, 
   SiGoogle 
 } from 'react-icons/si';
 import { 
@@ -12,6 +11,7 @@ import {
   RiUserFill, 
   RiSettings4Fill, 
   RiShieldCheckFill,
+  RiWallet3Fill,
   RiArrowRightLine,
   RiArrowLeftLine,
   RiDownloadCloud2Fill,
@@ -141,12 +141,12 @@ export const AuthGateway = () => {
             >
               <button 
                 onClick={() => setShowMetaMaskModal(false)}
-                className="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors"
+                className="absolute top-4 right-4 text-zinc-400 hover:text-white transition-colors"
               >
                 <RiCloseFill className="w-6 h-6" />
               </button>
               <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center">
-                <SiMetamask className="w-8 h-8 text-[#F6851B]" />
+                <RiWallet3Fill className="w-8 h-8 text-[#F6851B]" />
               </div>
               <div>
                 <h3 className="text-2xl font-black uppercase italic tracking-tighter text-white">MetaMask Required</h3>
@@ -179,7 +179,7 @@ export const AuthGateway = () => {
         <h1 className="text-6xl md:text-8xl font-black tracking-tighter uppercase italic text-white leading-[0.9]">
           The <span className="text-zinc-700">Gateway.</span>
         </h1>
-        <p className="text-zinc-500 font-bold tracking-[0.2em] uppercase text-xs md:text-sm max-w-md mx-auto lg:mx-0 leading-relaxed">
+        <p className="text-zinc-400 font-bold tracking-[0.2em] uppercase text-xs md:text-sm max-w-md mx-auto lg:mx-0 leading-relaxed">
           Authenticate via cryptographic signature or decentralized protocol to initialize the Brain Room.
         </p>
       </motion.div>
@@ -203,11 +203,11 @@ export const AuthGateway = () => {
                     className="w-full flex items-center justify-between px-6 py-4 bg-zinc-900 border border-white/5 rounded-2xl hover:bg-zinc-800 transition-all group disabled:opacity-50"
                   >
                     <div className="flex items-center space-x-4">
-                      <SiMetamask className="w-6 h-6 text-[#F6851B]" />
+                      <RiWallet3Fill className="w-6 h-6 text-[#F6851B]" />
                       <span className="font-bold text-white text-sm tracking-tight">Web3 Cryptographic Sign</span>
                     </div>
                     {walletAddress ? (
-                      <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">{formatAddress(walletAddress)}</span>
+                      <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">{formatAddress(walletAddress)}</span>
                     ) : (
                       <RiArrowRightLine className="w-4 h-4 text-zinc-600 group-hover:translate-x-1 transition-transform" />
                     )}
@@ -266,7 +266,7 @@ export const AuthGateway = () => {
               >
                 <button 
                   onClick={() => { setAuthMode('selection'); setError(''); }}
-                  className="flex items-center space-x-2 text-zinc-500 hover:text-white transition-colors group"
+                  className="flex items-center space-x-2 text-zinc-400 hover:text-white transition-colors group"
                 >
                   <RiArrowLeftLine className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                   <span className="text-[10px] font-black uppercase tracking-widest italic">Return</span>
@@ -276,7 +276,7 @@ export const AuthGateway = () => {
                   <h3 className="text-3xl font-black uppercase italic text-white tracking-tighter">
                     {authMode === 'login' ? 'System Login' : 'Register'}
                   </h3>
-                  <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">
+                  <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest">
                     Direct Gateway Access
                   </p>
                 </div>
@@ -286,7 +286,7 @@ export const AuthGateway = () => {
                     <div className="space-y-1.5">
                       <label className="text-[9px] font-black uppercase tracking-widest text-zinc-600 ml-2">Display Name</label>
                       <div className="relative">
-                        <RiUserFill className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                        <RiUserFill className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                         <input 
                           required
                           type="text"
@@ -302,7 +302,7 @@ export const AuthGateway = () => {
                   <div className="space-y-1.5">
                     <label className="text-[9px] font-black uppercase tracking-widest text-zinc-600 ml-2">Email Address</label>
                     <div className="relative">
-                      <RiMailFill className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                      <RiMailFill className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                       <input 
                         required
                         type="email"
@@ -317,7 +317,7 @@ export const AuthGateway = () => {
                   <div className="space-y-1.5">
                     <label className="text-[9px] font-black uppercase tracking-widest text-zinc-600 ml-2">Secret Code</label>
                     <div className="relative">
-                      <RiLockPasswordFill className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                      <RiLockPasswordFill className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                       <input 
                         required
                         type="password"
@@ -333,7 +333,7 @@ export const AuthGateway = () => {
                     <div className="space-y-1.5">
                       <label className="text-[9px] font-black uppercase tracking-widest text-zinc-600 ml-2">Confirm Code</label>
                       <div className="relative">
-                        <RiLockPasswordFill className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                        <RiLockPasswordFill className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                         <input 
                           required
                           type="password"
@@ -401,7 +401,7 @@ export const SettingsDashboard = () => {
     >
       <div className="flex items-center justify-between border-b border-white/5 pb-4">
         <div className="flex items-center space-x-3">
-          <RiSettings4Fill className="w-6 h-6 text-zinc-500 animate-spin-slow" />
+          <RiSettings4Fill className="w-6 h-6 text-zinc-400 animate-spin-slow" />
           <h2 className="text-2xl font-black uppercase tracking-tight italic text-white">System Provisioning</h2>
         </div>
         <div className="flex space-x-1">
@@ -421,7 +421,7 @@ export const SettingsDashboard = () => {
           </div>
         </div>
         <div className="relative">
-          <RiLockPasswordFill className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+          <RiLockPasswordFill className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
           <input 
             type="password"
             value={geminiKey}

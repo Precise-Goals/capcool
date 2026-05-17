@@ -1,0 +1,44 @@
+{
+  "stadiums": [
+    {
+      "name": "Wankhede Stadium, Mumbai",
+      "city": "Mumbai",
+      "pitch_soil_type": "Red Soil",
+      "characteristics": "High bounce, assists pace initially but becomes excellent for batting. Dew is a major factor in the second innings.",
+      "short_boundary_dimensions": "Square boundaries are short (approx 64-68m), straight boundaries are around 72m.",
+      "avg_first_innings_score": 185
+    },
+    {
+      "name": "M. Chinnaswamy Stadium, Bengaluru",
+      "city": "Bengaluru",
+      "pitch_soil_type": "Mixed/Flat",
+      "characteristics": "Extremely flat track, very little assistance for bowlers. High altitude means the ball travels further.",
+      "short_boundary_dimensions": "Very short all around, particularly square (approx 60-65m).",
+      "avg_first_innings_score": 195
+    },
+    {
+      "name": "MA Chidambaram Stadium (Chepauk), Chennai",
+      "city": "Chennai",
+      "pitch_soil_type": "Black Soil / Clay",
+      "characteristics": "Traditionally slow and low, offering significant turn. Spinners play a crucial role. Batting gets tougher as the game progresses.",
+      "short_boundary_dimensions": "Symmetrical, decent size. Square boundaries around 68-70m.",
+      "avg_first_innings_score": 165
+    },
+    {
+      "name": "Eden Gardens, Kolkata",
+      "city": "Kolkata",
+      "pitch_soil_type": "Black Soil",
+      "characteristics": "Good batting surface, but offers early swing for pacers. Spinners get purchase under lights. Fast outfield.",
+      "short_boundary_dimensions": "Large outfield, square boundaries around 71m.",
+      "avg_first_innings_score": 180
+    },
+    {
+      "name": "Narendra Modi Stadium, Ahmedabad",
+      "city": "Ahmedabad",
+      "pitch_soil_type": "Variable (Red and Black pitches available)",
+      "characteristics": "Multiple pitches. Red soil offers bounce and pace, black soil offers turn. Generally a good batting surface.",
+      "short_boundary_dimensions": "Very large ground. Straight boundaries are 75m+, square around 70m.",
+      "avg_first_innings_score": 175
+    }
+  ]
+}

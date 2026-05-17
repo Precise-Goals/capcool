@@ -30,7 +30,7 @@ const Hero = () => (
           AI <span className="underline decoration-zinc-800 underline-offset-8">Captain.</span>
         </h1>
         
-        <p className="max-w-2xl mx-auto text-zinc-500 text-lg md:text-xl font-medium leading-relaxed italic">
+        <p className="max-w-2xl mx-auto text-zinc-400 text-lg md:text-xl font-medium leading-relaxed italic">
           "The first adversarial multi-agent debate engine designed to solve T20 cricket's most complex tactical moments in real-time."
         </p>
         
@@ -76,7 +76,7 @@ const Features = () => {
               <f.icon className="w-7 h-7 text-black" />
             </div>
             <h3 className="text-2xl font-black uppercase tracking-tighter italic text-white leading-none">{f.title}</h3>
-            <p className="text-zinc-500 text-sm leading-relaxed font-medium italic">{f.desc}</p>
+            <p className="text-zinc-400 text-sm leading-relaxed font-medium italic">{f.desc}</p>
           </motion.div>
         ))}
       </div>
@@ -95,7 +95,7 @@ export const Home = () => (
       >
         <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.02)_50%,transparent_75%)] bg-[length:250%_250%] animate-shimmer" />
         <h2 className="text-6xl md:text-7xl font-black uppercase italic tracking-tighter text-white leading-none relative z-10">Ready to <span className="text-zinc-800 underline decoration-white/10 underline-offset-8">Simulate?</span></h2>
-        <p className="text-zinc-500 max-w-xl mx-auto text-xl font-medium italic relative z-10">"The Brain Room is open. Let the agents solve your next match-winning scenario."</p>
+        <p className="text-zinc-400 max-w-xl mx-auto text-xl font-medium italic relative z-10">"The Brain Room is open. Let the agents solve your next match-winning scenario."</p>
         <Link to="/auth" className="clay-button inline-block px-12 py-5 relative z-10">LAUNCH ENGINE</Link>
       </motion.div>
     </section>
@@ -107,7 +107,7 @@ export const About = () => (
     <div className="max-w-5xl mx-auto px-6 space-y-32">
       <div className="space-y-8 text-center">
         <h1 className="text-7xl md:text-8xl font-black uppercase italic tracking-tighter text-white leading-none">The Protocol.</h1>
-        <p className="text-zinc-500 text-2xl leading-relaxed font-medium italic max-w-3xl mx-auto">
+        <p className="text-zinc-400 text-2xl leading-relaxed font-medium italic max-w-3xl mx-auto">
           "Captain Cool isn't just an AI; it's a high-fidelity simulation of elite tactical decision-making, vetted by multiple perspectives."
         </p>
       </div>
@@ -122,10 +122,10 @@ export const About = () => (
             <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center">
               <RiTerminalBoxFill className="w-6 h-6 text-white" />
             </div>
-            <span className="text-[12px] font-black uppercase tracking-[0.5em] text-zinc-600 group-hover:text-white transition-colors">Phase 01</span>
+            <span className="text-[12px] font-black uppercase tracking-[0.5em] text-zinc-300 group-hover:text-white transition-colors">Phase 01</span>
           </div>
           <h3 className="text-5xl font-black uppercase italic text-white tracking-tighter">The Head Analyst</h3>
-          <p className="text-zinc-500 text-lg leading-relaxed font-medium italic">Analyzes bowler-batsman history, ground dimensions, and historical run-rates to propose the most statistically sound move based on "The Stats Don't Lie" methodology.</p>
+          <p className="text-zinc-400 text-lg leading-relaxed font-medium italic">Analyzes bowler-batsman history, ground dimensions, and historical run-rates to propose the most statistically sound move based on "The Stats Don't Lie" methodology.</p>
         </motion.div>
         
         <motion.div 
@@ -137,10 +137,10 @@ export const About = () => (
             <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center">
               <RiDatabaseFill className="w-6 h-6 text-white" />
             </div>
-            <span className="text-[12px] font-black uppercase tracking-[0.5em] text-zinc-600 group-hover:text-white transition-colors">Phase 02</span>
+            <span className="text-[12px] font-black uppercase tracking-[0.5em] text-zinc-300 group-hover:text-white transition-colors">Phase 02</span>
           </div>
           <h3 className="text-5xl font-black uppercase italic text-white tracking-tighter">The Devil's Advocate</h3>
-          <p className="text-zinc-500 text-lg leading-relaxed font-medium italic">The skeptic. Looks for the unexpected—the dew factor, psychological pressure, and contrarian tactics that raw data often overlooks.</p>
+          <p className="text-zinc-400 text-lg leading-relaxed font-medium italic">The skeptic. Looks for the unexpected—the dew factor, psychological pressure, and contrarian tactics that raw data often overlooks.</p>
         </motion.div>
         
         <motion.div 
@@ -152,10 +152,10 @@ export const About = () => (
             <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center">
               <RiMagicFill className="w-6 h-6 text-white" />
             </div>
-            <span className="text-[12px] font-black uppercase tracking-[0.5em] text-zinc-600 group-hover:text-white transition-colors">Phase 03</span>
+            <span className="text-[12px] font-black uppercase tracking-[0.5em] text-zinc-300 group-hover:text-white transition-colors">Phase 03</span>
           </div>
           <h3 className="text-5xl font-black uppercase italic text-white tracking-tighter">The Virtual Captain</h3>
-          <p className="text-zinc-500 text-lg leading-relaxed font-medium italic">The final arbiter. Synthesizes the debate, weighs the risks, and delivers the definitive tactical call in authentic commentator prose.</p>
+          <p className="text-zinc-400 text-lg leading-relaxed font-medium italic">The final arbiter. Synthesizes the debate, weighs the risks, and delivers the definitive tactical call in authentic commentator prose.</p>
         </motion.div>
       </div>
     </div>
