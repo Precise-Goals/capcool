@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navbar, Footer } from './components/Navigation';
 import { Home, About } from './components/Pages';
 import { AuthGateway, SettingsDashboard } from './components/AuthComponents';
-import { Play, MessageSquare, Terminal, ChevronRight, Wind, Droplets, MapPin, Users, Globe, Image as ImageIcon } from 'lucide-react';
+import { Play, MessageSquare, Terminal, ChevronRight, Wind, Droplets, MapPin, Users, Globe, Image as ImageIcon, Volume2 } from 'lucide-react';
 
 const ProtectedRoute = ({ children }) => {
   const { user, walletAddress, loading } = useAuth();
@@ -37,7 +37,8 @@ const BrainRoom = () => {
   const { geminiKey } = useAuth();
   const [loading, setLoading] = useState(false);
   const [debate, setDebate] = useState([]);
-  const [mode, setMode] = useState('manual'); // 'manual' or 'real-time'
+  const [mode, setMode] = useState('manual');
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
   
   // Structured Match State
   const [matchState, setMatchState] = useState({
@@ -53,6 +54,15 @@ const BrainRoom = () => {
     additionalContext: '',
     liveUrl: ''
   });
+
+  const speak = (text) => {
+    if (!voiceEnabled || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.9;
+    utterance.pitch = 1.1;
+    window.speechSynthesis.speak(utterance);
+  };
 
   const runDebate = async () => {
     if (!geminiKey) return;
@@ -82,6 +92,11 @@ const BrainRoom = () => {
       const data = await response.json();
       if (data.error) throw new Error(data.error);
       setDebate(data.transcript);
+      
+      // Speak the final decision
+      const captainDecision = data.transcript.find(t => t.agent === "The Virtual Captain");
+      if (captainDecision) speak(captainDecision.text);
+      
     } catch (error) {
       alert("Debate failed: " + error.message);
     } finally {
@@ -97,9 +112,14 @@ const BrainRoom = () => {
           <div className="flex items-center space-x-4">
             <p className="text-zinc-500 font-bold uppercase tracking-[0.3em] text-[10px]">Active Multi-Agent Session</p>
             <div className="h-1 w-1 rounded-full bg-zinc-800" />
-            <div className="flex items-center space-x-1">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[8px] font-black uppercase text-green-500/80 tracking-widest">Live Engine</span>
+            <div className="flex items-center space-x-2">
+              <button 
+                onClick={() => setVoiceEnabled(!voiceEnabled)}
+                className={`flex items-center space-x-1.5 px-2 py-0.5 rounded border transition-all ${voiceEnabled ? 'bg-white/10 border-white/20 text-white' : 'bg-transparent border-white/5 text-zinc-600'}`}
+              >
+                <Volume2 className="w-2.5 h-2.5" />
+                <span className="text-[8px] font-black uppercase tracking-widest">{voiceEnabled ? 'Voice On' : 'Voice Off'}</span>
+              </button>
             </div>
           </div>
         </div>
